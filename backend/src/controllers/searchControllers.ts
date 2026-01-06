@@ -1,0 +1,11 @@
+import { RagService } from "../services/ragService";
+import { AnswerDTO } from "../models/types";
+
+export class SearchController {
+  constructor(private rag: RagService) {}
+
+  async search(query: string, userId: string): Promise<AnswerDTO> {
+    const answer = await this.rag.answer(query, userId);
+    return { answer: answer.text, sources: answer.sources };
+  }
+}

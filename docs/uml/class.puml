@@ -1,0 +1,77 @@
+@startuml
+
+class SearchController {
+  +search(query: string, userId: string): AnswerDTO
+}
+
+class RagService {
+  +answer(query: string, userId: string): Answer
+  -composePrompt(query: string, chunks: Chunk[*]): string
+}
+
+class VectorStoreAdapter {
+  +similaritySearch(embedding: float[], topK: int): Chunk[*]
+  +upsert(docId: string, chunks: Chunk[*]): void
+}
+
+class PdfExtractor {
+  +extractText(pdfPath: string): string
+}
+
+class Chunker {
+  +split(text: string): Chunk[*]
+}
+
+class Embedder {
+  +embed(texts: string[*]): float[*]
+}
+
+class LLMClient {
+  +generate(prompt: string): string
+  +embed(text: string): float[*]
+}
+
+class Logger {
+  +logSearch(userId: string, query: string, sources: SourceRef[*], latencyMs: int): void
+}
+
+class AuthService {
+  +verify(token: string): User
+}
+
+class IngestionController
+
+class Chunk {
+  +id: string
+  +docId: string
+  +text: string
+  +embedding: float[]
+  +sourceRef: SourceRef
+}
+
+class SourceRef {
+  +documentName: string
+  +page: int
+  +offset: int
+}
+
+class Answer {
+  +text: string
+  +sources: SourceRef[*]
+}
+
+class AnswerDTO {
+  +answer: string
+  +sources: SourceRef[*]
+}
+
+SearchController --> RagService
+RagService --> VectorStoreAdapter
+RagService --> LLMClient
+RagService --> Logger
+IngestionController --> PdfExtractor
+IngestionController --> Chunker
+IngestionController --> Embedder
+IngestionController --> VectorStoreAdapter
+
+@enduml

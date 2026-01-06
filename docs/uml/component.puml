@@ -1,0 +1,34 @@
+@startuml component
+package "Client (Next.js/React)" {
+  [Login UI] --> (Auth Endpoint)
+  [Search UI] --> (Search API)
+}
+
+node "Backend (Node.js/TypeScript)" {
+  (Auth Endpoint) --> [AuthService]
+  (Search API) --> [SearchController]
+  (Ingestion API) --> [IngestionController]
+
+  [SearchController] --> [RagService]
+  [RagService] --> [VectorStoreAdapter]
+  [RagService] --> [LLMClient]
+  [RagService] --> [Logger]
+
+  [IngestionController] --> [PdfExtractor]
+  [IngestionController] --> [Chunker]
+  [IngestionController] --> [Embedder]
+  [IngestionController] --> [VectorStoreAdapter]
+  [IngestionController] --> [Logger]
+
+  [AuthService] --> [Extranet/OIDC Provider]
+}
+
+database "Vector DB (FAISS/Pinecone)" as VDB
+[VectorStoreAdapter] --> VDB
+
+cloud "AI Model API (OpenAI/HuggingFace)" as LLM
+[LLMClient] --> LLM
+
+cloud "Extranet Identity Provider" as IDP
+[AuthService] --> IDP
+@enduml

@@ -1,0 +1,23 @@
+@startuml search
+actor User
+participant SearchUI
+participant SearchController
+participant RagService
+participant LLMClient
+participant VectorStoreAdapter
+participant Logger
+
+User -> SearchUI: Enter query
+SearchUI -> SearchController: search(query, userId)
+SearchController -> RagService: answer(query, userId)
+RagService -> LLMClient: embed(query)
+LLMClient --> RagService: queryEmbedding
+RagService -> VectorStoreAdapter: similaritySearch(queryEmbedding, topK)
+VectorStoreAdapter --> RagService: chunks
+RagService -> RagService: composePrompt(query, chunks)
+RagService -> LLMClient: generate(prompt)
+LLMClient --> RagService: answerText
+RagService -> Logger: logSearch(userId, query, sources, latencyMs)
+RagService --> SearchController: Answer
+SearchController --> SearchUI: AnswerDTO
+@enduml

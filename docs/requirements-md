@@ -1,0 +1,23 @@
+K1 – Semantic Search: RAG answers based on PDF content.
+Acceptance: Answer must include at least 1 SourceRef.
+
+K2 – Ingestion: Extract text, chunk, and embed PDFs.
+Acceptance: PDF ingestion completes without errors.
+
+K3 – Vector Database: Store/search embeddings (similarity, top‑K).
+Acceptance: Query returns top‑K chunks.
+
+K4 – RAG Answer with Sources: Answers must show document name and page.
+Acceptance: Each answer cites document and page.
+
+K5 – Authentication: Only enterprise accounts via Extranet/OIDC.
+Acceptance: Unauthorized users receive 401.
+
+K6 – Logging: Log query, userId, sources, latency.
+Acceptance: Each search is logged with all fields.
+
+K7 – Frontend: Next.js  UI for login, query, answer.
+Acceptance: User can log in and submit queries.
+
+K8 – PoC Scope: Limited number of documents, simple UI.
+Acceptance: Demo runs with restricted set of docs.

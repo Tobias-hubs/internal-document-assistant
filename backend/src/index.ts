@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { SearchController } from "./controllers/searchControllers";
 import { RagService } from "./services/ragService";
 import { MockVectorStore } from "./adapters/mockVectorStore";
@@ -6,6 +7,7 @@ import { MockLLMClient } from "./adapters/mockLLMClient";
 import { MockLogger } from "./utils/logger";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const vectorStore = new MockVectorStore();

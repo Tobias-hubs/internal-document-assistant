@@ -8,7 +8,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState("");
   const [sources, setSources] = useState<any[]>([]); // Temporary any
-  const [docId, setDocId] = useState<string | null>("tobias-larsson"); // Hardcoded for dev
+  const [docId, setDocId] = useState<string | null>("sample"); // Hardcoded for dev
   const [username, setUsername] = useState("");
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
@@ -45,7 +45,7 @@ export default function Home() {
       const data = await response.json();
       setAnswer(data.answer);
       setSources(data.sources);
-      setPdfUrl("http://localhost:3001/documents/Tobias%20Larsson.pdf"); ///
+      setPdfUrl("http://localhost:3001/documents/sample.pdf"); ///
     } catch (error) {
       console.error("Error fetching from backend:", error);
       setAnswer("Something went wrong with backend response.");

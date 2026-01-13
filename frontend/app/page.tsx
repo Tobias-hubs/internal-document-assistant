@@ -1,23 +1,44 @@
 "use client";
 
 import { useState } from "react"; 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 
 export default function Home() {
 const [query, setQuery] = useState(""); 
 const [answer, setAnswer] = useState(""); 
 const [sources, setSources] = useState<any[]>([]); // Temporary any 
+const [docId, setDocId] = useState<string | null>("tobias-larsson"); // Hardcoded for dev
+ const [username, setUsername] = useState("");
+
+const router = useRouter();
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("loggedIn");
+    if (!loggedIn) {
+      router.push("/login");
+    }
+  }, []);
+
+useEffect(() => {
+  setUsername(localStorage.getItem("username") || "");
+}, []);
 
 const askBackend = async () => { 
+  if (!query || !docId) { 
+    setAnswer("Välj dokument och skriv en fråga.");
+    return;
+  }
   try { 
-    const response = await fetch("http://localhost:3001/search", { 
+    const response = await fetch("http://localhost:3001/api/search", { 
       method: "POST",
       headers: { 
         "Content-Type": "application/json", 
       },
       body: JSON.stringify({
         query: query, 
-        userId: "test-user" 
+        docId: docId,
       }),
     });
 
@@ -48,7 +69,15 @@ const askBackend = async () => {
 <div className="min-h-screen bg-zinc-900 text-zinc-100 flex items-center justify-center p-6">
   <div className="w-full max-w-xl rounded-lg bg-zinc-800 p-6 shadow-lg">
     <h1 className="mb-4 text-xl font-semibold">Internal Document Assistant</h1>
-
+<p className="text-sm text-zinc-400 mb-2">
+  Inloggad som: {username}
+</p>
+<form
+  onSubmit={(e) => {
+    e.preventDefault();
+    askBackend();
+  }}
+>
     <input
       className="mb-4 w-full rounded bg-zinc-700 border border-zinc-600 p-2 text-zinc-100 placeholder-zinc-400"
       type="text"
@@ -58,12 +87,13 @@ const askBackend = async () => {
     />
 
     <button
+    type="submit"
       className="mb-6 rounded bg-blue-600 px-4 py-2 hover:bg-blue-500"
       onClick={askBackend}
     >
       Skicka
     </button>
-
+</form>
     {answer && (
       <div className="mb-4">
         <h2 className="font-semibold">Svar:</h2>

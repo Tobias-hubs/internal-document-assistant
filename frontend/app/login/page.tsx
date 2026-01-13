@@ -9,7 +9,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState(""); 
 
     const handleLogin = () => { 
-        if (username && password === "Tobias") { 
+        if (username && password === "tobias") { 
             localStorage.setItem("loggedIn", "true");
             localStorage.setItem("username", username);
             router.push("/"); 

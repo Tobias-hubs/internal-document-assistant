@@ -6,11 +6,17 @@ import { MockVectorStore } from "./adapters/mockVectorStore";
 import { MockLLMClient } from "./adapters/mockLLMClient";
 import { MockLogger } from "./utils/logger";
 import ingestRoutes from "./routes/ingestRoutes";
+import path from "path";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api", ingestRoutes);
+
+app.use(
+  "/documents",
+  express.static(path.join(__dirname, "..", "documents"))
+);
 
 const vectorStore = new MockVectorStore();
 const llmClient = new MockLLMClient();

@@ -14,6 +14,8 @@ export default function Home() {
 
   const router = useRouter();
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedIn");
     if (!loggedIn) {
@@ -31,7 +33,7 @@ export default function Home() {
       return;
     }
     try {
-      const response = await fetch("http://localhost:3001/api/search", {
+      const response = await fetch(`${API_URL}/api/search`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +47,7 @@ export default function Home() {
       const data = await response.json();
       setAnswer(data.answer);
       setSources(data.sources);
-      setPdfUrl("http://localhost:3001/documents/sample.pdf"); ///
+      setPdfUrl(`${API_URL}/documents/sample.pdf`); ///
     } catch (error) {
       console.error("Error fetching from backend:", error);
       setAnswer("Something went wrong with backend response.");

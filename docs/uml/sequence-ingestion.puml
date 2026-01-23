@@ -1,23 +1,32 @@
 @startuml ingestion
+
 actor Operator
 participant IngestionUI
-participant IngestionController
-participant PdfExtractor
-participant Chunker
-participant Embedder
+participant DocumentIngestController
+participant PdfService
+participant DocumentIngestService
+participant LLMClient
 participant VectorStoreAdapter
 participant Logger
 
-Operator -> IngestionUI: Register PDF
-IngestionUI -> IngestionController: ingest(pdfPath, docId)
-IngestionController -> PdfExtractor: extractText(pdfPath)
-PdfExtractor --> IngestionController: rawText
-IngestionController -> Chunker: split(rawText)
-Chunker --> IngestionController: chunks
-IngestionController -> Embedder: embed(chunks.text)
-Embedder --> IngestionController: embeddings
-IngestionController -> VectorStoreAdapter: upsert(docId, chunks+embeddings)
-VectorStoreAdapter --> IngestionController: ack
-IngestionController -> Logger: logIngestion(docId, "OK")
-IngestionController --> IngestionUI: ingestionStatus
+Operator -> IngestionUI: Upload PDF
+IngestionUI -> DocumentIngestController: ingest(fileBuffer, docId)
+
+DocumentIngestController -> PdfService: extractText(fileBuffer)
+PdfService --> DocumentIngestController: rawText
+
+DocumentIngestController -> DocumentIngestService: splitIntoChunks(rawText)
+DocumentIngestService --> DocumentIngestController: chunks
+
+DocumentIngestController -> LLMClient: embed(chunks.text)
+LLMClient --> DocumentIngestController: embeddings
+
+DocumentIngestController -> VectorStoreAdapter: upsert(docId, chunks + embeddings)
+VectorStoreAdapter --> DocumentIngestController: ack
+
+DocumentIngestController -> Logger: logIngestion(docId, "OK")
+Logger --> DocumentIngestController: logged
+
+DocumentIngestController --> IngestionUI: ingestionStatus
+
 @enduml

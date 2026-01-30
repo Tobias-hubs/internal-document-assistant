@@ -2,7 +2,7 @@ import { LLMClient } from "./llmClient";
 
 export class MockLLMClient implements LLMClient {
   async embed(text: string): Promise<number[]> {
-    const embedding = Array.from({ length: 384 }, () => Math.random() * 2 - 1);
+    const embedding = Array.from({ length: 384 }, () => Math.random() * 2 - 1); // Create Array with 384 elements that is an random number
     console.log(`Mock: Skapade embedding för text: "${text.substring(0, 50)}..."`);
     return embedding;
   }

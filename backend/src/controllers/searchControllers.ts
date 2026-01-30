@@ -7,5 +7,7 @@ export class SearchController {
   async search(query: string, userId: string): Promise<AnswerDTO> {
     const answer = await this.rag.answer(query, userId);
     return { answer: answer.text, sources: answer.sources };
+    // Internaly map Answer to AnswerDTO for frontend: 
+    // 'text' from Answer becomes 'answer' in DTO, 'sources' copied as-is
   }
 }

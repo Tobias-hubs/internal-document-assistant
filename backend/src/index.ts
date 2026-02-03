@@ -3,10 +3,15 @@ import cors from "cors";
 import { SearchController } from "./controllers/searchControllers";
 import { RagService } from "./services/ragService";
 import { MockVectorStore } from "./adapters/mockVectorStore";
-import { MockLLMClient } from "./adapters/mockLLMClient";
+// import { MockLLMClient } from "./adapters/mockLLMClient";
+import { OpenAILLMClient } from "./adapters/openaiLLMClient"
 import { MockLogger } from "./utils/logger";
 import ingestRoutes from "./routes/ingestRoutes";
 import path from "path";
+import dotenv from "dotenv"; 
+
+dotenv.config();
+
 
 const app = express();
 app.use(cors());
@@ -19,7 +24,8 @@ app.use(
 );
 
 const vectorStore = new MockVectorStore();
-const llmClient = new MockLLMClient();
+// const llmClient = new MockLLMClient();
+const llmClient = new OpenAILLMClient(); 
 const logger = new MockLogger();
 
 const ragService = new RagService(vectorStore, llmClient, logger);

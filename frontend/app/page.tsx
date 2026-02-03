@@ -32,7 +32,41 @@ export default function Home() {
       setAnswer("Välj dokument och skriv en fråga.");
       return;
     }
-    try {
+    
+try {
+  // Fallback: använd API_URL om den finns, annars localhost:3001
+  const BASE_URL = API_URL || "http://localhost:3001";
+
+  const response = await fetch(`${BASE_URL}/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: query,
+      docId: docId,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Backend error: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // Uppdatera state med backend-data
+  setAnswer(data.answer);
+  setSources(data.sources);
+
+  // Om en statisk pdf URL
+  setPdfUrl(`${BASE_URL}/documents/sample.pdf`);
+
+} catch (error) {
+  console.error("Error fetching from backend:", error);
+  setAnswer("Something went wrong with backend response.");
+}
+
+  /*  try {
       const response = await fetch(`${API_URL}/api/search`, {
         method: "POST",
         headers: {
@@ -51,7 +85,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching from backend:", error);
       setAnswer("Something went wrong with backend response.");
-    }
+    } */
   };
 
   return (

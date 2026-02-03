@@ -26,7 +26,6 @@ An AI-powered service for searching and managing internal documents. Built with 
 git clone https://github.com/Tobias-hubs/internal-document-assistant.git
 cd internal-document-assistant
 npm install
+npm run dev
 
-cd backend && npm run dev
 
-cd backend && npm run dev

@@ -6,22 +6,28 @@ export class RagService {
   constructor(
     private store: VectorStoreAdapter,
     private llm: LLMClient,
-    private logger: { logSearch: Function }) {}
+    private logger: { logSearch: Function,}) {}
 
   async answer(query: string, userId: string, topK = 5): Promise<Answer> {
+    console.log("rag service runs"); // Sanity check
+
     const t0 = Date.now();
 
     // 1) Embed query
     const queryEmbedding = await this.llm.embed(query);
+    console.log("Embedding klar:", queryEmbedding.length, "dimensioner");
 
     // 2) Retrieve top-K chunks
     const chunks: Chunk[] = await this.store.similaritySearch(queryEmbedding, topK);
+    console.log("Top-K chunks:", chunks.map(c => c.sourceRef.documentName));
 
     // 3) Compose prompt with sources
     const prompt = this.composePrompt(query, chunks);
+    console.log("Prompt:", prompt);
 
     // 4) Generate answer from LLM
     const answerText = await this.llm.generate(prompt);
+    console.log("LLM-svar:", answerText);
 
     // 5) Collect sources and log
     const sources: SourceRef[] = chunks.map(c => c.sourceRef);

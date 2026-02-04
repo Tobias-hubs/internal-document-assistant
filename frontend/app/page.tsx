@@ -37,7 +37,7 @@ try {
   // Fallback: använd API_URL om den finns, annars localhost:3001
   const BASE_URL = API_URL || "http://localhost:3001";
 
-  const response = await fetch(`${BASE_URL}/search`, {
+  const response = await fetch(`${BASE_URL}/api/search`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

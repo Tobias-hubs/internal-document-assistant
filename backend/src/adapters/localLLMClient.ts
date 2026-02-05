@@ -1,3 +1,4 @@
+// The Engine 
 // import OpenAI from "openai"; 
 import { LLMClient } from "./llmClient";
 
@@ -27,7 +28,7 @@ export class localLLMClient implements LLMClient {
     } 
 
     ) { 
-        this.baseUrl = options?.baseUrl ?? "http://localhost:11434";
+        this.baseUrl = options?.baseUrl ?? process.env.OLLAMA_URL ?? "http://localhost:11434";
         this.embedModel = options?.embedModel ?? "nomic-embed-text"; 
         this.chatModel = options?.chatModel ?? "llama3";
 }
@@ -94,3 +95,6 @@ async function safeText(res: Response): Promise<string> {
         return ""; 
     }
 }
+
+
+// TODO: Fallback to AzureOpenAI ?

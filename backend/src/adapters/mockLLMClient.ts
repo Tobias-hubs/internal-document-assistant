@@ -1,3 +1,4 @@
+/*
 import { LLMClient } from "./llmClient";
 
 export class MockLLMClient implements LLMClient {
@@ -20,4 +21,4 @@ export class MockLLMClient implements LLMClient {
     console.log(`Mock: Genererade svar för prompt med ${lines.length} rader`);
     return answer;
   }
-}
+} */

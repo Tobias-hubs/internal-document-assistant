@@ -9,6 +9,7 @@ export class RagService {
     private logger: { logSearch: Function }) {}
 
   async answer(query: string, userId: string, topK = 5): Promise<Answer> {
+    console.log("rag runs"); // sanity check
     const t0 = Date.now();
 
     // 1) Embed query

@@ -183,6 +183,14 @@ export default function Home() {
  
 
       {/*PDF below chat */} 
+
+      <button 
+      type="submit" 
+      className="rounded bg-red-600 px-3 py-5 hover:bg-blue-500"
+      
+      >
+        Upload PDF
+      </button>
      
       {/* <div className="bg-zinc-800 rounded shadow overflow-hidden">
         {pdfUrl ? (         // TODO PDF ingestion / PDF view 
